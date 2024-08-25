@@ -3,6 +3,8 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import dotenv from "dotenv";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type GifType = {
     id: string,
@@ -11,12 +13,18 @@ type GifType = {
 };
 
 const GiphySearch = () => {
+    const { data: session, status } = useSession();
+    const router = useRouter();
     dotenv.config()
     const [query,setQuery] = useState<string>('');
     const [gifs,setGifs] = useState<GifType[]>([]);
     const [offset,setOffset] = useState<number>(0);
     const [loading,setLoading] = useState<boolean>(false);
     const limit: number = 3
+
+    if (status === "unauthenticated") {
+        router.push("/signup");
+    }
 
     const searchGif = useCallback(async () => {
         if(query === ""){
