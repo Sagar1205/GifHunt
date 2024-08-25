@@ -2,8 +2,12 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/app/firebase";
+import dotenv from "dotenv"
+dotenv.config()
 
 export const authOptions = {
+    secret: process.env.NEXTAUTH_SECRET,
+
     pages: {
         signIn: "/login",
     },
